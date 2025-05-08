@@ -7,6 +7,7 @@ import model.Aluno;
 import model.Livro;
 import model.Emprestimo;
 
+import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,18 +24,17 @@ public class Main {
         boolean continuar = true;
 
         while (continuar) {
-            // Exibe o menu de opções
             System.out.println("\n📚 Sistema da Biblioteca 📚");
             System.out.println("1. Cadastrar Aluno");
             System.out.println("2. Cadastrar Livro");
             System.out.println("3. Cadastrar Empréstimo");
-            System.out.println("4. Sair");
+            System.out.println("4. Listar Alunos");
+            System.out.println("5. Sair");
             System.out.print("Escolha uma opção: ");
 
             try {
                 int opcao = Integer.parseInt(scanner.nextLine());
 
-                // Executa a ação conforme a opção escolhida
                 switch (opcao) {
                     case 1:
                         cadastrarAluno(scanner, alunoDAO);
@@ -46,19 +46,21 @@ public class Main {
                         cadastrarEmprestimo(scanner, emprestimoDAO);
                         break;
                     case 4:
+                        listarAlunos(alunoDAO); // <-- chamada do método
+                        break;
+                    case 5:
                         System.out.println("Encerrando o sistema.");
                         continuar = false;
                         break;
                     default:
-                        System.out.println("❌ Opção inválida. Escolha entre 1 e 4.");
+                        System.out.println("❌ Opção inválida. Escolha entre 1 e 5.");
                 }
             } catch (NumberFormatException e) {
-                // Caso o usuário digite letras ou símbolos
-                System.out.println("❌ Entrada inválida. Digite apenas números (1 a 4).");
+                System.out.println("❌ Entrada inválida. Digite apenas números (1 a 5).");
             }
         }
 
-        scanner.close(); // Fecha o scanner ao final
+        scanner.close();
     }
 
     /**
@@ -254,4 +256,21 @@ public class Main {
             System.out.println("❌ Erro ao cadastrar empréstimo: " + e.getMessage());
         }
     }
+
+    private static void listarAlunos(AlunoDAO alunoDAO) {
+        System.out.println("\n📋 Lista de Alunos:");
+        List<Aluno> alunos = alunoDAO.listarAlunos();
+        if (alunos.isEmpty()) {
+            System.out.println("Nenhum aluno cadastrado.");
+        } else {
+            for (Aluno aluno : alunos) {
+                System.out.println("ID: " + aluno.getId());
+                System.out.println("Nome: " + aluno.getNome());
+                System.out.println("Matrícula: " + aluno.getMatricula());
+                System.out.println("Data de Nascimento: " + aluno.getDataNascimento());
+                System.out.println("-----------------------------");
+            }
+        }
+    }
+
 }

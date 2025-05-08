@@ -6,6 +6,8 @@ public class Aluno {
     private String matricula;
     private String dataNascimento;
 
+    public Aluno() {}
+
     public Aluno(int id, String nome, String matricula, String dataNascimento) {
         this.id = id;
         this.nome = nome;
